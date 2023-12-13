@@ -1,20 +1,44 @@
 from typing import List
 
 from sqlalchemy.orm import Session
+from sqlalchemy import select, func, or_
 
 from src.database.models import Contact
 from src.schemas import ContactModel
+from sqlalchemy import select
 
 
 async def get_contacts(skip: int, limit: int, db: Session) -> List[Contact]:
-    return db.query(Contact).offset(skip).limit(limit).all()
+    result =  db.query(Contact).offset(skip).limit(limit).all()
+    print(f"))))))))))))))))))))))))))))))))))))))){result}")
+
+    db.query(Contact).offset(skip).limit(limit).all()
+    return result
+   
 
 
 async def get_contact(contact_id: int, db: Session) -> Contact:
     return db.query(Contact).filter(Contact.id == contact_id).first()
 
-async def get_contact_firstname(contact_firstname: str, db: Session) -> Contact:
-    return db.query(Contact).filter(Contact.firstname==contact_firstname)
+
+async def get_contact_firstname(firstname:str  ,  db: Session):
+    print(f"=========================================================={firstname}")
+    result = db.query(Contact).filter(Contact.firstname == firstname).all()
+    print(f"((((((((((((((((((((((((((((((((((((((((({result}")
+    return result
+    #return db.query(Contact).filter(Contact.firstname.like("%1%"))
+    # if firstname:
+    #     field = Contact.firstname
+    #     value = firstname
+    # elif lastname:
+    #     field = Contact.lastname
+    #     value =  lastname
+    # elif email:
+    #     field = Contact. email
+    #     value =  email
+    #return db.query(Contact).filter(Contact.firstname == firstname).count()
+    
+     
 
 
 async def create_contact(body: ContactModel, db: Session) -> Contact:
@@ -43,3 +67,8 @@ async def remove_contact(contact_id: int, db: Session)  -> Contact :
     db.delete(contact)
     db.commit()
     return contact
+
+
+
+#)))))))))))))))))))))))))))))))))))))))[<src.database.models.Contact object at 0x0000017343CEDE90>, <src.database.models.Contact object at 0x0000017341D483D0>, <src.database.models.Contact object at 0x0000017343CEDF50>]
+#((((((((((((((((((((((((((((((((((((((([<src.database.models.Contact object at 0x000001F92DA777D0>, <src.database.models.Contact object at 0x000001F92DA77850>]

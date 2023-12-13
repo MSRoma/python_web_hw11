@@ -13,14 +13,14 @@ class ContactModel(BaseModel):
 
 
 
-class ContactResponse(ContactModel):
+class ContactResponse(BaseModel):
     id: int
-
-    class Config:
-        orm_mode = True
-
-class ContactResponse1(ContactModel):
-    firstname: str
+    firstname: str 
+    lastname: str 
+    email: str 
+    mobilenamber: str 
+    databirthday: datetime 
+    note: str 
 
     class Config:
         orm_mode = True

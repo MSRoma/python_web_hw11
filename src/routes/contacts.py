@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Depends, status, Query
 from sqlalchemy.orm import Session
 
 from src.database.db import get_db
-from src.schemas import ContactModel, ContactResponse ,ContactResponse1  #, ContactStatusUpdate
+from src.schemas import ContactModel, ContactResponse   #, ContactStatusUpdate
 from src.repository import contacts as repository_contacts
 
 
@@ -25,12 +25,14 @@ async def read_contact(contact_id: int, db: Session = Depends(get_db)):
     return contact
 
 
-@router.get("/{contact_firstname}", response_model=ContactResponse1)
-async def read_firstname(contact_firstname: str , db: Session = Depends(get_db)):
-    contact = await repository_contacts.get_contact_firstname(contact_firstname, db)
+@router.get("/contacts/", response_model=ContactResponse)
+async def read_contact_(firstname: str , db: Session = Depends(get_db)):
+    print(f"+++++++++++++++++++++++++++++++++++++++++++++++{firstname}")
+    contact = await repository_contacts.get_contact_firstname(firstname, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
     return contact
+
 
 
 @router.post("/", response_model=ContactResponse)
