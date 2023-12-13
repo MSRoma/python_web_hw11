@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, func, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey
-from sqlalchemy.sql.sqltypes import DateTime
+from sqlalchemy.sql.sqltypes import DateTime, Date
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -21,7 +21,7 @@ class Contact(Base):
     lastname = Column(String(50), nullable=False)
     email = Column(String(50), nullable=False)
     mobilenamber = Column(String(50), nullable=False)
-    databirthday = Column('databirthday', DateTime, nullable=False)
+    databirthday = Column('databirthday', Date, nullable=False)
     note = Column(String(150), nullable=True)
     createdat = Column('createdat', DateTime, default=func.now())
     

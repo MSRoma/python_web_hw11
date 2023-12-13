@@ -4,12 +4,12 @@ from fastapi import APIRouter, HTTPException, Depends, status, Query
 from sqlalchemy.orm import Session
 
 from src.database.db import get_db
-from src.schemas import ContactModel, ContactResponse   #, ContactStatusUpdate
+from src.schemas import ContactModel, ContactResponse # ContactStatusUpdate
 from src.repository import contacts as repository_contacts
 
 
 router = APIRouter(prefix='/contacts', tags=["contacts"])
-#router = APIRouter(prefix='/contacts', contacts=["contacts"])
+
 
 @router.get("/", response_model=List[ContactResponse])
 async def read_contacts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -25,10 +25,16 @@ async def read_contact(contact_id: int, db: Session = Depends(get_db)):
     return contact
 
 
-@router.get("/contacts/", response_model=ContactResponse)
-async def read_contact_(firstname: str , db: Session = Depends(get_db)):
-    print(f"+++++++++++++++++++++++++++++++++++++++++++++++{firstname}")
-    contact = await repository_contacts.get_contact_firstname(firstname, db)
+@router.get("/contacts/", response_model=List[ContactResponse],tags=["contacts"])
+async def read_contacts_name_or_surname_or_email(firstname: str | None = None,lastname: str | None = None, email: str | None = None, skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    contact = await repository_contacts.get_contact_firstname(firstname, lastname, email, skip, limit, db)
+    if contact is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
+    return contact
+
+@router.get("/birthday/", response_model=List[ContactResponse],tags=["contacts"])
+async def read_contacts_birthday(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    contact = await repository_contacts.get_contact_birthday(skip, limit, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
     return contact
